@@ -5,9 +5,9 @@ module.exports = {
   },
   extends: [
     "plugin:react/recommended",
-    "plugin:import/error",
-    "plugin:import/warning",
-    "airbnb",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
