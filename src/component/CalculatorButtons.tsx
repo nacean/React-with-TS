@@ -24,6 +24,7 @@ function CalculatorButtons() {
     setCalculatedString("");
     setNumber("0");
     setString("");
+    setLastCalc("+");
   }
 
   function ClickResultButton() {
