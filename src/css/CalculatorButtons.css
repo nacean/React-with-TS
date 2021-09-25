@@ -1,0 +1,29 @@
+.NumberButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  height: 300px;
+  width: 250px;
+}
+
+.Button {
+  height: 50px;
+  width: 70px;
+}
+
+.ContentButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 70px;
+  height: 300px;
+}
+
+.Buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 350px;
+  height: 400px;
+}
