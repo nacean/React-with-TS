@@ -1,12 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../css/CalculatorButtons.css";
 import { setNumber, setString } from "./CalculatorResult";
+import firebase from "../firebase";
 
 function CalculatorButtons() {
   const [newNumber, setnewNumber] = useState(0);
   const [CalculatedNumbers, setCalculatedNumbers] = useState([0]);
   const [CalculatedString, setCalculatedString] = useState("");
   const [LastCalc, setLastCalc] = useState("+");
+  // const [DBArray, setDBArray] = useState<Array<object>>([]); //Array<object>를 명시해줘야 never가 아님
+
+  const PastDivRef = useRef<HTMLUListElement>(null);
+
+  function PutInList(
+    CalculatedString: string,
+    CalculatedNumbers: string,
+    id: string
+  ) {
+    const newDB = document.createElement("li");
+    const newDelete = document.createElement("button");
+    newDB.id = id;
+    newDB.innerText = `[Calculate Process : ${CalculatedString}] [Result : ${CalculatedNumbers}]`;
+    newDelete.innerText = "X";
+    newDelete.id = id;
+    newDelete.onclick = () => {
+      DeleteDB(id);
+    };
+    newDB.appendChild(newDelete);
+    // setDBArray([...DBArray, newDBObject]);
+    PastDivRef.current?.appendChild(newDB);
+  }
+
+  async function getCollection() {
+    const databases = firebase.collection(firebase.db, "DBPractice");
+    const snapshot = await firebase.getDocs(databases);
+    snapshot.forEach((doc) => {
+      console.log(typeof doc.data());
+      PutInList(
+        doc.data().CalculatedString,
+        doc.data().CalculatedNumbers,
+        doc.id
+      );
+    });
+  }
+
+  useEffect(() => {
+    getCollection();
+  }, []);
+
+  async function AddtoDB() {
+    let Addednum = 0;
+    CalculatedNumbers.forEach((number) => (Addednum += number));
+    const databases = firebase.collection(firebase.db, "DBPractice");
+
+    const AddDB = await firebase.addDoc(databases, {
+      CalculatedNumbers: String(Addednum),
+      CalculatedString: CalculatedString + String(newNumber),
+    });
+    PutInList(CalculatedString + String(newNumber), String(Addednum), AddDB.id);
+  }
+
+  async function DeleteDB(id: string) {
+    const Deleteli = document.getElementById(id);
+    Deleteli?.remove();
+
+    const databases = firebase.collection(firebase.db, "DBPractice");
+    await firebase.deleteDoc(firebase.doc(databases, id));
+  }
 
   function ClickNumberButton(props: any) {
     const PickNumber = props.target.innerText;
@@ -74,90 +134,98 @@ function CalculatorButtons() {
   }
 
   return (
-    <div className="Buttons">
-      <div className="NumberButtons">
-        <button
-          className="Button"
-          onClick={(props) => ClickNumberButton(props)}
-        >
-          1
-        </button>
-        <button
-          className="Button"
-          onClick={(props) => ClickNumberButton(props)}
-        >
-          2
-        </button>
-        <button
-          className="Button"
-          onClick={(props) => ClickNumberButton(props)}
-        >
-          3
-        </button>
-        <button
-          className="Button"
-          onClick={(props) => ClickNumberButton(props)}
-        >
-          4
-        </button>
-        <button
-          className="Button"
-          onClick={(props) => ClickNumberButton(props)}
-        >
-          5
-        </button>
-        <button
-          className="Button"
-          onClick={(props) => ClickNumberButton(props)}
-        >
-          6
-        </button>
-        <button
-          className="Button"
-          onClick={(props) => ClickNumberButton(props)}
-        >
-          7
-        </button>
-        <button
-          className="Button"
-          onClick={(props) => ClickNumberButton(props)}
-        >
-          8
-        </button>
-        <button
-          className="Button"
-          onClick={(props) => ClickNumberButton(props)}
-        >
-          9
-        </button>
-        <button className="Button" onClick={(props) => ClickReturnButton()}>
-          C
-        </button>
-        <button
-          className="Button"
-          onClick={(props) => ClickNumberButton(props)}
-        >
-          0
-        </button>
-        <button className="Button" onClick={() => ClickResultButton()}>
-          =
+    <>
+      <div className="Buttons">
+        <div className="NumberButtons">
+          <button
+            className="Button"
+            onClick={(props) => ClickNumberButton(props)}
+          >
+            1
+          </button>
+          <button
+            className="Button"
+            onClick={(props) => ClickNumberButton(props)}
+          >
+            2
+          </button>
+          <button
+            className="Button"
+            onClick={(props) => ClickNumberButton(props)}
+          >
+            3
+          </button>
+          <button
+            className="Button"
+            onClick={(props) => ClickNumberButton(props)}
+          >
+            4
+          </button>
+          <button
+            className="Button"
+            onClick={(props) => ClickNumberButton(props)}
+          >
+            5
+          </button>
+          <button
+            className="Button"
+            onClick={(props) => ClickNumberButton(props)}
+          >
+            6
+          </button>
+          <button
+            className="Button"
+            onClick={(props) => ClickNumberButton(props)}
+          >
+            7
+          </button>
+          <button
+            className="Button"
+            onClick={(props) => ClickNumberButton(props)}
+          >
+            8
+          </button>
+          <button
+            className="Button"
+            onClick={(props) => ClickNumberButton(props)}
+          >
+            9
+          </button>
+          <button className="Button" onClick={(props) => ClickReturnButton()}>
+            C
+          </button>
+          <button
+            className="Button"
+            onClick={(props) => ClickNumberButton(props)}
+          >
+            0
+          </button>
+          <button className="Button" onClick={() => ClickResultButton()}>
+            =
+          </button>
+        </div>
+        <div className="ContentButtons">
+          <button className="Button" onClick={() => ClickCalculateButton("+")}>
+            +
+          </button>
+          <button className="Button" onClick={() => ClickCalculateButton("-")}>
+            -
+          </button>
+          <button className="Button" onClick={() => ClickCalculateButton("*")}>
+            *
+          </button>
+          <button className="Button" onClick={() => ClickCalculateButton("/")}>
+            /
+          </button>
+        </div>
+      </div>
+      <div className="PastResultButton">
+        <button className="DBAddButton" onClick={() => AddtoDB()}>
+          Add to DataBase
         </button>
       </div>
-      <div className="ContentButtons">
-        <button className="Button" onClick={() => ClickCalculateButton("+")}>
-          +
-        </button>
-        <button className="Button" onClick={() => ClickCalculateButton("-")}>
-          -
-        </button>
-        <button className="Button" onClick={() => ClickCalculateButton("*")}>
-          *
-        </button>
-        <button className="Button" onClick={() => ClickCalculateButton("/")}>
-          /
-        </button>
-      </div>
-    </div>
+      <ul className="PastResults" ref={PastDivRef}></ul>
+    </>
   );
 }
 
