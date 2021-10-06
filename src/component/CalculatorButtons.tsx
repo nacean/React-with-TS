@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../css/CalculatorButtons.css";
 import { setNumber, setString } from "./CalculatorResult";
 import firebase from "../firebase";
@@ -31,7 +31,7 @@ function CalculatorButtons() {
     PastDivRef.current?.appendChild(newDB);
   }
 
-  async function getCollection() {
+  const getCollection = async () => {
     const databases = firebase.collection(firebase.db, "DBPractice");
     const snapshot = await firebase.getDocs(databases);
     snapshot.forEach((doc) => {
@@ -42,7 +42,12 @@ function CalculatorButtons() {
         doc.id
       );
     });
-  }
+  };
+
+  useEffect(() => {
+    getCollection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function AddtoDB() {
     let Addednum = 0;
@@ -98,8 +103,6 @@ function CalculatorButtons() {
     setnewNumber(0);
     setLastCalc(NewCalc);
   }
-
-  getCollection();
 
   function GetNumber(): Array<number> {
     let TempNumber = CalculatedNumbers;
