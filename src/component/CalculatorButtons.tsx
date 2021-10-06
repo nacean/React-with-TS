@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import "../css/CalculatorButtons.css";
 import { setNumber, setString } from "./CalculatorResult";
 import firebase from "../firebase";
@@ -43,10 +43,6 @@ function CalculatorButtons() {
       );
     });
   }
-
-  useEffect(() => {
-    getCollection();
-  }, []);
 
   async function AddtoDB() {
     let Addednum = 0;
@@ -102,6 +98,8 @@ function CalculatorButtons() {
     setnewNumber(0);
     setLastCalc(NewCalc);
   }
+
+  getCollection();
 
   function GetNumber(): Array<number> {
     let TempNumber = CalculatedNumbers;
