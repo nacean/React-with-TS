@@ -1,34 +1,35 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/CalculatorButtons.css";
 import { setNumber, setString } from "./CalculatorResult";
 import firebase from "../firebase";
 
 function CalculatorButtons() {
   const [newNumber, setnewNumber] = useState(0);
-  const [CalculatedNumbers, setCalculatedNumbers] = useState([0]);
-  const [CalculatedString, setCalculatedString] = useState("");
+  const [calculatedNumbers, setCalculatedNumbers] = useState([0]);
+  const [calculatedString, setCalculatedString] = useState("");
   const [LastCalc, setLastCalc] = useState("+");
+  const [calculatedList, setCalculatedList] = useState<{
+    id: string, 
+    process: string, 
+    result: string, 
+    deleteHook: () => void 
+  }[]>([]);
   // const [DBArray, setDBArray] = useState<Array<object>>([]); //Array<object>를 명시해줘야 never가 아님
-
-  const PastDivRef = useRef<HTMLUListElement>(null);
 
   function PutInList(
     CalculatedString: string,
     CalculatedNumbers: string,
     id: string
   ) {
-    const newDB = document.createElement("li");
-    const newDelete = document.createElement("button");
-    newDB.id = id;
-    newDB.innerText = `[Calculate Process : ${CalculatedString}] [Result : ${CalculatedNumbers}]`;
-    newDelete.innerText = "X";
-    newDelete.id = id;
-    newDelete.onclick = () => {
-      DeleteDB(id);
-    };
-    newDB.appendChild(newDelete);
-    // setDBArray([...DBArray, newDBObject]);
-    PastDivRef.current?.appendChild(newDB);
+    setCalculatedList([
+      ...calculatedList,
+      {
+        id,
+        process:CalculatedString,
+        result: CalculatedNumbers,
+        deleteHook: () => { DeleteDB(id)}
+      }
+    ])
   }
 
   const getCollection = async () => {
@@ -51,14 +52,14 @@ function CalculatorButtons() {
 
   async function AddtoDB() {
     let Addednum = 0;
-    CalculatedNumbers.forEach((number) => (Addednum += number));
+    calculatedNumbers.forEach((number) => (Addednum += number));
     const databases = firebase.collection(firebase.db, "DBPractice");
 
     const AddDB = await firebase.addDoc(databases, {
       CalculatedNumbers: String(Addednum),
-      CalculatedString: CalculatedString + String(newNumber),
+      CalculatedString: calculatedString + String(newNumber),
     });
-    PutInList(CalculatedString + String(newNumber), String(Addednum), AddDB.id);
+    PutInList(calculatedString + String(newNumber), String(Addednum), AddDB.id);
   }
 
   async function DeleteDB(id: string) {
@@ -93,19 +94,19 @@ function CalculatorButtons() {
     let Addednum = 0;
     ResultNumber.forEach((number) => (Addednum += number));
     setNumber(String(Addednum));
-    setString(CalculatedString + String(newNumber));
+    setString(calculatedString + String(newNumber));
   }
 
   function ClickCalculateButton(NewCalc: string) {
     GetNumber();
-    setCalculatedString(CalculatedString + newNumber + NewCalc);
-    setString(CalculatedString + newNumber + NewCalc);
+    setCalculatedString(calculatedString + newNumber + NewCalc);
+    setString(calculatedString + newNumber + NewCalc);
     setnewNumber(0);
     setLastCalc(NewCalc);
   }
 
   function GetNumber(): Array<number> {
-    let TempNumber = CalculatedNumbers;
+    let TempNumber = calculatedNumbers;
     switch (LastCalc) {
       case "+":
         TempNumber = [...TempNumber, newNumber];
@@ -128,7 +129,7 @@ function CalculatorButtons() {
         break;
 
       default:
-        setCalculatedNumbers(CalculatedNumbers);
+        setCalculatedNumbers(calculatedNumbers);
     }
 
     return TempNumber;
@@ -225,7 +226,16 @@ function CalculatorButtons() {
           Add to DataBase
         </button>
       </div>
-      <ul className="PastResults" ref={PastDivRef}></ul>
+      <ul className="PastResults">
+        {calculatedList.map(calculated => 
+          <li id={calculated.id}>
+          [Calculate Process : {calculated.process}] [Result : {calculated.result}]
+            <button id={calculated.id} onClick={calculated.deleteHook}>
+              X
+            </button>
+          </li>
+        )}
+      </ul>
     </>
   );
 }
