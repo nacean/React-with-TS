@@ -14,7 +14,6 @@ function CalculatorButtons() {
     result: string, 
     deleteHook: () => void 
   }[]>([]);
-  // const [DBArray, setDBArray] = useState<Array<object>>([]); //Array<object>를 명시해줘야 never가 아님
 
   function PutInList(
     CalculatedString: string,
@@ -33,6 +32,7 @@ function CalculatorButtons() {
   }
 
   const getCollection = async () => {
+    // 처음 시작 시, 초기화
     const databases = firebase.collection(firebase.db, "DBPractice");
     const snapshot = await firebase.getDocs(databases);
     snapshot.forEach((doc) => {
@@ -46,11 +46,13 @@ function CalculatorButtons() {
   };
 
   useEffect(() => {
+    //eslint warning으로 인해 disable
     getCollection();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function AddtoDB() {
+    //DB에 저장
     let Addednum = 0;
     calculatedNumbers.forEach((number) => (Addednum += number));
     const databases = firebase.collection(firebase.db, "DBPractice");
@@ -63,6 +65,7 @@ function CalculatorButtons() {
   }
 
   async function DeleteDB(id: string) {
+    //DB에서 삭제
     const Deleteli = document.getElementById(id);
     Deleteli?.remove();
 
