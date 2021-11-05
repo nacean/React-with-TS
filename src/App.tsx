@@ -12,8 +12,8 @@ function App() {
     user: User | null;
     isLoggedIn: true | false;
   }>({
-    token: JSON.parse(localStorage.getItem("token") ?? "{}") ?? null,
-    user: JSON.parse(localStorage.getItem("user") ?? "{}") ?? null,
+    token: null,
+    user: null,
     isLoggedIn: false,
   });
 
@@ -32,11 +32,8 @@ function App() {
       user,
       isLoggedIn,
     });
-
-    localStorage.setItem("token", JSON.stringify(token));
-    localStorage.setItem("user", JSON.stringify(user));
   };
-
+  console.log(state);
   return (
     <div className="App">
       <CalculatorResult />
