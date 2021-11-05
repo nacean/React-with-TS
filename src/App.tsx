@@ -17,6 +17,11 @@ function App() {
     isLoggedIn: false,
   });
 
+  function DeleteCookies() {
+    setAuth({ token: null, user: null, isLoggedIn: false });
+    document.cookie = `token=;user=; expires=Thu, 18 Dec 2013 12:00:00 GMT;`;
+  }
+
   // App state에 token과 user, login여부를 설정한다.
   const setAuth = ({
     token,
@@ -32,18 +37,15 @@ function App() {
       user,
       isLoggedIn,
     });
+    document.cookie = `token=${token};user=${user};`;
   };
-  console.log(state);
+
   return (
     <div className="App">
       <CalculatorResult />
       <CalculatorButtons />
-      {state.isLoggedIn === true ? (
-        <LogoutButton
-          onLogout={() =>
-            setAuth({ token: null, user: null, isLoggedIn: false })
-          }
-        ></LogoutButton>
+      {document.cookie.length !== 0 ? (
+        <LogoutButton onLogout={() => DeleteCookies()}></LogoutButton>
       ) : (
         <LoginButton onLogin={setAuth}></LoginButton>
       )}
