@@ -16,7 +16,7 @@ function App() {
     user: null,
     isLoggedIn: false,
   });
-  console.log(state);
+
   function DeleteCookies() {
     setAuth({ token: null, user: null, isLoggedIn: false });
     document.cookie = `token=;user=; expires=Thu, 18 Dec 2013 12:00:00 GMT;`;
@@ -44,7 +44,7 @@ function App() {
     <div className="App">
       <CalculatorResult />
       <CalculatorButtons />
-      {document.cookie.length !== 0 ? (
+      {state.isLoggedIn === true ? (
         <LogoutButton onLogout={() => DeleteCookies()}></LogoutButton>
       ) : (
         <LoginButton onLogin={setAuth}></LoginButton>
