@@ -44,7 +44,7 @@ function App() {
     <div className="App">
       <CalculatorResult />
       <CalculatorButtons />
-      {state.isLoggedIn === true ? (
+      {state.isLoggedIn === true || document.cookie.length !== 0 ? (
         <LogoutButton onLogout={() => DeleteCookies()}></LogoutButton>
       ) : (
         <LoginButton onLogin={setAuth}></LoginButton>
