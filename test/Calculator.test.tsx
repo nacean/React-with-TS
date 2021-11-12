@@ -12,8 +12,12 @@ describe("Calculator Test", () => {
         <CalculatorResult />
       </div>
     );
+
     userEvent.click(screen.getByText("1"));
+    userEvent.click(screen.getByText("+"));
     userEvent.click(screen.getByText("2"));
-    expect(screen.getByText("12").innerText).toBe("12");
+    userEvent.click(screen.getByText("="));
+
+    expect(screen.getByText("3").innerText).toBe("3");
   });
 });
