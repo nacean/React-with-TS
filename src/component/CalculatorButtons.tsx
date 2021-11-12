@@ -144,12 +144,14 @@ function CalculatorButtons() {
         <div className="NumberButtons">
           <button
             className="Button"
+            id="1"
             onClick={(props) => ClickNumberButton(props)}
           >
             1
           </button>
           <button
             className="Button"
+            id="2"
             onClick={(props) => ClickNumberButton(props)}
           >
             2
