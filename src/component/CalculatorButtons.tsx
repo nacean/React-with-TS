@@ -247,7 +247,17 @@ function CalculatorButtons() {
           Add to DataBase
         </button>
       </div>
-      <ul className="PastResults">{MakePastResult()}</ul>
+      <ul className="PastResults">
+        {calculatedList.map((calculated) => (
+          <li id={calculated.id}>
+            [Calculate Process : {calculated.process}] [Result :{" "}
+            {calculated.result}]
+            <button id={calculated.id} onClick={calculated.deleteHook}>
+              X
+            </button>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
