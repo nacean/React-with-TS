@@ -8,12 +8,14 @@ function CalculatorButtons() {
   const [calculatedNumbers, setCalculatedNumbers] = useState([0]);
   const [calculatedString, setCalculatedString] = useState("");
   const [LastCalc, setLastCalc] = useState("+");
-  const [calculatedList, setCalculatedList] = useState<{
-    id: string, 
-    process: string, 
-    result: string, 
-    deleteHook: () => void 
-  }[]>([]);
+  const [calculatedList, setCalculatedList] = useState<
+    {
+      id: string;
+      process: string;
+      result: string;
+      deleteHook: () => void;
+    }[]
+  >([]);
 
   function PutInList(
     CalculatedString: string,
@@ -24,11 +26,13 @@ function CalculatorButtons() {
       ...calculatedList,
       {
         id,
-        process:CalculatedString,
+        process: CalculatedString,
         result: CalculatedNumbers,
-        deleteHook: () => { DeleteDB(id)}
-      }
-    ])
+        deleteHook: () => {
+          DeleteDB(id);
+        },
+      },
+    ]);
   }
 
   const getCollection = async () => {
@@ -138,6 +142,18 @@ function CalculatorButtons() {
     return TempNumber;
   }
 
+  function MakePastResult() {
+    return calculatedList.map((calculated) => (
+      <li id={calculated.id}>
+        [Calculate Process : {calculated.process}] [Result : {calculated.result}
+        ]
+        <button id={calculated.id} onClick={calculated.deleteHook}>
+          X
+        </button>
+      </li>
+    ));
+  }
+
   return (
     <>
       <div className="Buttons">
@@ -231,16 +247,7 @@ function CalculatorButtons() {
           Add to DataBase
         </button>
       </div>
-      <ul className="PastResults">
-        {calculatedList.map(calculated => 
-          <li id={calculated.id}>
-          [Calculate Process : {calculated.process}] [Result : {calculated.result}]
-            <button id={calculated.id} onClick={calculated.deleteHook}>
-              X
-            </button>
-          </li>
-        )}
-      </ul>
+      <ul className="PastResults">{MakePastResult()};</ul>
     </>
   );
 }
