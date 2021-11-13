@@ -142,17 +142,17 @@ function CalculatorButtons() {
     return TempNumber;
   }
 
-  function MakePastResult() {
-    return calculatedList.map((calculated) => (
-      <li id={calculated.id}>
-        [Calculate Process : {calculated.process}] [Result : {calculated.result}
-        ]
-        <button id={calculated.id} onClick={calculated.deleteHook}>
-          X
-        </button>
-      </li>
-    ));
-  }
+  // function MakePastResult() {
+  //   return calculatedList.map((calculated) => (
+  //     <li id={calculated.id}>
+  //       [Calculate Process : {calculated.process}] [Result : {calculated.result}
+  //       ]
+  //       <button id={calculated.id} onClick={calculated.deleteHook}>
+  //         X
+  //       </button>
+  //     </li>
+  //   ));
+  // }
 
   return (
     <>
