@@ -247,7 +247,7 @@ function CalculatorButtons() {
           Add to DataBase
         </button>
       </div>
-      <ul className="PastResults">{MakePastResult()};</ul>
+      <ul className="PastResults">{MakePastResult()}</ul>
     </>
   );
 }
