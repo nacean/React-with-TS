@@ -20,6 +20,7 @@
 
 #Gihub hide
 .env.ts
+.env
 
 npm-debug.log*
 yarn-debug.log*
