@@ -38,7 +38,7 @@ const LoginButton = ({
     console.log(token, user);
   };
 
-  return <button onClick={handleClick}>sign in with google</button>;
+  return <button className="loginBtn" onClick={handleClick}>sign in with google</button>;
 };
 
 export default LoginButton;

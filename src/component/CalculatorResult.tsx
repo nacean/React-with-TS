@@ -16,8 +16,8 @@ function setString(number: string) {
 function CalculatorResult() {
   return (
     <div className="UpperBlock">
-      <div className="Progress"></div>
       <div className="Result"></div>
+      <div className="Progress"></div>
     </div>
   );
 }
